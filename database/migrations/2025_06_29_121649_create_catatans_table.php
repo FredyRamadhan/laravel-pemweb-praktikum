@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('judul');
             $table->text('isi')->nullable();
+            $table->foreignId('user_id');
             $table->timestamps();
         });
     }
