@@ -16,65 +16,68 @@
             </style>
         @endif
     </head>
-    <body class="bg-gray-500 dark:bg-gray-900 text-white flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
-        <div class="w-full max-w-4xl">
-            @if(session('success'))
-                <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                    <ul class="list-disc list-inside">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            <form action="{{ isset($note) ? '/update/' . $note->id : '/create' }}" method="POST">
-                @csrf
-                <div class="mb-8 p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
-                    <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-                        {{ isset($note) ? 'Edit Catatan' : 'Buat Catatan Baru' }}
-                    </h2>
-                    <div class="space-y-4">
-                        <input type="text" name="judul" placeholder="Judul Catatan"
-                               value="{{ isset($note) ? $note->judul : old('judul') }}"
-                               class="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-gray-100">
-                        <textarea name="isi" placeholder="Isi Catatan" rows="4"
-                                  class="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-gray-100">{{ isset($note) ? $note->isi : old('isi') }}</textarea>
-                        <div class="flex space-x-2">
-                            <button type="submit" class="flex-1 py-3 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-                                {{ isset($note) ? 'Update' : 'Simpan' }}
-                            </button>
-                            @if(isset($note))
-                                <a href="/" class="flex-1 py-3 px-4 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors text-center">
-                                    Batal
-                                </a>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @if ($notes && $notes->count() > 0)
-                    @foreach ($notes as $noteItem)
-                        <x-note>
-                            <x-slot:id>{{ $noteItem->id }}</x-slot:id>
-                            <x-slot:title>{{ $noteItem->judul }}</x-slot:title>
-                            {{ $noteItem->isi }}
-                        </x-note>
-                    @endforeach
-                @else
-                    <div class="col-span-full text-center py-12">
-                        <p class="text-gray-500 dark:text-gray-400 text-lg">Belum ada catatan. Buat catatan pertama Anda!</p>
+    <body >
+        <x-nav></x-nav>
+        <main class="bg-gray-500 dark:bg-gray-900 text-white flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
+            <div class="w-full max-w-4xl">
+                @if(session('success'))
+                    <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                        {{ session('success') }}
                     </div>
                 @endif
+    
+                @if($errors->any())
+                    <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                        <ul class="list-disc list-inside">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <form action="{{ isset($note) ? '/update/' . $note->id : '/create' }}" method="POST">
+                    @csrf
+                    <div class="mb-8 p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                            {{ isset($note) ? 'Edit Catatan' : 'Buat Catatan Baru' }}
+                        </h2>
+                        <div class="space-y-4">
+                            <input type="text" name="judul" placeholder="Judul Catatan"
+                                   value="{{ isset($note) ? $note->judul : old('judul') }}"
+                                   class="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-gray-100">
+                            <textarea name="isi" placeholder="Isi Catatan" rows="4"
+                                      class="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-gray-100">{{ isset($note) ? $note->isi : old('isi') }}</textarea>
+                            <div class="flex space-x-2">
+                                <button type="submit" class="flex-1 py-3 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                    {{ isset($note) ? 'Update' : 'Simpan' }}
+                                </button>
+                                @if(isset($note))
+                                    <a href="/" class="flex-1 py-3 px-4 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors text-center">
+                                        Batal
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </form>
+    
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @if ($notes && $notes->count() > 0)
+                        @foreach ($notes as $noteItem)
+                            <x-note>
+                                <x-slot:id>{{ $noteItem->id }}</x-slot:id>
+                                <x-slot:title>{{ $noteItem->judul }}</x-slot:title>
+                                {{ $noteItem->isi }}
+                            </x-note>
+                        @endforeach
+                    @else
+                        <div class="col-span-full text-center py-12">
+                            <p class="text-gray-500 dark:text-gray-400 text-lg">Belum ada catatan. Buat catatan pertama Anda!</p>
+                        </div>
+                    @endif
+                </div>
             </div>
-        </div>
+        </main>
     </body>
 </html>
 
